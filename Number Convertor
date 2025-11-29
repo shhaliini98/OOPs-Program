@@ -1,0 +1,162 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+
+// Optional: ANSI color codes for output (works on most terminals)
+#define RESET   "\033[0m"
+#define CYAN    "\033[36m"
+#define YELLOW  "\033[33m"
+#define GREEN   "\033[32m"
+#define RED     "\033[31m"
+#define BOLD    "\033[1m"
+
+// Stack class for character storage
+class Stack {
+    char* arr;
+    int top;
+    int maxSize;
+public:
+    Stack(int size = 64) {
+        arr = new char[size];
+        top = -1;
+        maxSize = size;
+    }
+    ~Stack() { delete[] arr; }
+    bool isEmpty() { return top == -1; }
+    void push(char c) { arr[++top] = c; }
+    char pop() { return isEmpty() ? '\0' : arr[top--]; }
+};
+
+// Conversion Functions below
+string decimalToBinary(int n) {
+    if (n == 0) return "0";
+    Stack s;
+    while (n > 0) {
+        s.push((n % 2) + '0');
+        n /= 2;
+    }
+    string res;
+    while (!s.isEmpty()) res += s.pop();
+    return res;
+}
+
+string decimalToHex(int n) {
+    if (n == 0) return "0";
+    Stack s;
+    string hexDigits = "0123456789ABCDEF";
+    while (n > 0) {
+        s.push(hexDigits[n % 16]);
+        n /= 16;
+    }
+    string res;
+    while (!s.isEmpty()) res += s.pop();
+    return res;
+}
+
+int binaryToDecimal(const string& bin) {
+    int res = 0, base = 1;
+    for (int i = bin.length() - 1; i >= 0; --i) {
+        if (bin[i] == '1') res += base;
+        base *= 2;
+    }
+    return res;
+}
+
+int hexToDecimal(const string& hex) {
+    int res = 0, base = 1;
+    for (int i = hex.length() - 1; i >= 0; --i) {
+        char c = toupper(hex[i]);
+        int val = (c >= '0' && c <= '9') ? c - '0' : c - 'A' + 10;
+        res += val * base;
+        base *= 16;
+    }
+    return res;
+}
+
+string binaryToHex(const string& bin) {
+    int dec = binaryToDecimal(bin);
+    return decimalToHex(dec);
+}
+
+string hexToBinary(const string& hex) {
+    int dec = hexToDecimal(hex);
+    return decimalToBinary(dec);
+}
+
+void printSeparator() {
+    cout << CYAN << "--------------------------------------------" << RESET << endl;
+}
+
+void showMenu() {
+    printSeparator();
+    cout << BOLD << CYAN << "      ★ NUMBER CONVERTER USING STACK ★\n" << RESET;
+    printSeparator();
+    cout << YELLOW << " 1. Decimal to Binary\n";
+    cout << " 2. Decimal to Hexadecimal\n";
+    cout << " 3. Binary to Decimal\n";
+    cout << " 4. Hexadecimal to Decimal\n";
+    cout << " 5. Binary to Hexadecimal\n";
+    cout << " 6. Hexadecimal to Binary\n";
+    cout << " 0. Exit\n" << RESET;
+    printSeparator();
+    cout << GREEN << "Choose your option: " << RESET;
+}
+
+void printResult(const string& result, const string& label) {
+    cout << BOLD << GREEN << " Result: " << label << result << RESET << endl;
+    printSeparator();
+}
+
+int main() {
+    int choice;
+    do {
+        showMenu();
+        cin >> choice;
+        printSeparator();
+        if(choice == 1) {
+            int n;
+            cout << CYAN << "Enter Decimal Number: " << RESET;
+            cin >> n;
+            printResult(decimalToBinary(n), "Binary = ");
+        }
+        else if(choice == 2) {
+            int n;
+            cout << CYAN << "Enter Decimal Number: " << RESET;
+            cin >> n;
+            printResult(decimalToHex(n), "Hexadecimal = ");
+        }
+        else if(choice == 3) {
+            string bin;
+            cout << CYAN << "Enter Binary Number: " << RESET;
+            cin >> bin;
+            printResult(to_string(binaryToDecimal(bin)), "Decimal = ");
+        }
+        else if(choice == 4) {
+            string hex;
+            cout << CYAN << "Enter Hexadecimal Number: " << RESET;
+            cin >> hex;
+            printResult(to_string(hexToDecimal(hex)), "Decimal = ");
+        }
+        else if(choice == 5) {
+            string bin;
+            cout << CYAN << "Enter Binary Number: " << RESET;
+            cin >> bin;
+            printResult(binaryToHex(bin), "Hexadecimal = ");
+        }
+        else if(choice == 6) {
+            string hex;
+            cout << CYAN << "Enter Hexadecimal Number: " << RESET;
+            cin >> hex;
+            printResult(hexToBinary(hex), "Binary = ");
+        }
+        else if(choice == 0) {
+            cout << GREEN << "Thank you for using the Number Converter! ★\n" << RESET;
+        }
+        else {
+            cout << RED << "Invalid option! Please try again.\n" << RESET;
+        }
+    } while(choice != 0);
+
+    return 0;
+}
