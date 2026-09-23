@@ -1,10 +1,10 @@
-Number Converter
+#Number Converter
 
 A simple C++ console-based application that converts numbers between different number systems.
 
 This project was created as a beginner-level C++ project to practice programming fundamentals and understand how different number systems work.
 
-✨ Features
+# Features
 🔄 Convert Decimal to Binary
 🔄 Convert Binary to Decimal
 🔄 Convert Decimal to Octal
@@ -47,7 +47,7 @@ The user selects the required conversion and enters a number.
 
 The program then performs the required conversion and displays the result.
 
-Example Flow
+#Example Flow
 ===== NUMBER CONVERTER =====
 
 1. Decimal to Binary
